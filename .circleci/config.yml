@@ -181,16 +181,17 @@ jobs:
       - checkout
 
       - run:
-          name: Install helm
+          name: Install helm and plugins
           command: |
             curl -Lo get-helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get && chmod +x get-helm.sh
             ./get-helm.sh --version "${HELM_VERSION}"
             rm get-helm.sh
+            helm plugin install https://github.com/sstarcher/helm-release
 
       - run:
           name: Checking out Github Pages branch
           command: |
-            # use git+ssh instead of https
+            # Use git+ssh instead of https
             git config --global url."ssh://git@github.com".insteadOf "https://github.com" || true
             git config --global gc.auto 0 || true
             mkdir -p /tmp/helm
@@ -200,6 +201,8 @@ jobs:
           name: Package chart and update chart index
           command: |
             helm repo add stable https://kubernetes-charts.storage.googleapis.com
+            # Update the version in Chart.yaml to the tag version.
+            helm release . --skip-application-version
             helm package --destination /tmp/helm/publish --dependency-update .
             helm repo index /tmp/helm/publish
 
@@ -267,5 +270,7 @@ workflows:
             - h2k19
             - h3k19
           filters:
+            tags:
+              only: /^v.*/
             branches:
-              only: master
+              ignore: /.*/
