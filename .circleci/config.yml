@@ -260,6 +260,7 @@ workflows:
           k8s: v1.19.2
           requires:
             - h2k16
+      # We publish releases for tags only.
       - publish:
           filters:
             tags:
