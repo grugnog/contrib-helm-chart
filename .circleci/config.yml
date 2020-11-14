@@ -176,7 +176,7 @@ jobs:
       # Add read-write SSH deploy key
       - add_ssh_keys:
           fingerprints:
-            - "36:04:b4:4a:31:a6:16:a1:e8:75:da:ee:b7:05:f4:34"
+            - "2e:52:50:ab:6d:47:61:62:1c:08:d4:a3:1d:fa:ff:7a"
 
       - checkout
 
